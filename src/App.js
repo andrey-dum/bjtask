@@ -1,24 +1,44 @@
-import logo from './logo.svg';
+import { useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import './App.css';
+import AddForm from './components/AddForm';
+import Login from './components/Login';
+import NavbarApp from './components/NavbarApp';
+import AuthRoute from './utils/AuthRoute';
+import TaskList from './components/TaskList';
+import { useActions } from './hooks/useActions';
+import Container from '@material-ui/core/Container';
+import PositionedSnackbar from './components/PositionedSnackbar';
+
+
+
 
 function App() {
+  const {autoLogin} = useActions()
+
+  useEffect(() => {
+      autoLogin()
+  }, [])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="app">
+        <NavbarApp />
+        <Container maxWidth="sm">
+          <Switch>
+            <Route path="/add"  component={AddForm} />
+            <AuthRoute path="/login" component={Login} />
+            <Route path="/"  component={TaskList} />
+          </Switch>
+          <PositionedSnackbar />
+        </Container>
+      </div>
+    </Router>
   );
 }
 
